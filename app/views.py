@@ -81,18 +81,22 @@ class MyChatBotView(generic.View):
 
                     if message_text == 'My Boarding Pass':
                         post_facebook_message(sender_id,'boarding_pass_template')
+                        post_facebook_message(sender_id,'main_quick_reply')
 
                     elif message_text == 'My Checkin Pass':
                         post_facebook_message(sender_id,'airline_checkin')
+                        post_facebook_message(sender_id,'main_quick_reply')
 
                     elif message_text == 'My Airline Itinerary':
                         post_facebook_message(sender_id,'airline_itinerary')
+                        post_facebook_message(sender_id,'main_quick_reply')
 
                     elif message_text.lower() in "hey,hi,supp,hello".split(','):
                         post_facebook_message(sender_id,'main_quick_reply')
 
                     elif message_text == 'Recommend a seat for me':
                         post_facebook_message(sender_id,'seat')
+                        post_facebook_message(sender_id,'main_quick_reply')
 
                     else:
                         sender_id = message['sender']['id']
