@@ -36,7 +36,10 @@ def post_facebook_message(fbid,message_text):
         response_msg = airline_checkin(fbid)    
 
     elif message_text == 'airline_itinerary':
-        response_msg = airline_itinerary(fbid)    
+        response_msg = airline_itinerary(fbid) 
+
+    elif message_text == 'main_quick_reply':
+        response_msg = main_quick_reply(fbid)    
 
     else:
         response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":message_text}})
@@ -73,15 +76,17 @@ class MyChatBotView(generic.View):
                     firstName = '%s'%(DataInstance['first_name'])
 
 
-                    if message_text == 'bpass':
+                    if message['message']['quick_reply']['payload'] == 'bpass':
                         post_facebook_message(sender_id,'boarding_pass_template')
 
-                    elif message_text == 'cpass':
+                    elif message['message']['quick_reply']['payload'] == 'cpass':
                         post_facebook_message(sender_id,'airline_checkin')
 
-                    elif message_text == 'ipass':
+                    elif message['message']['quick_reply']['payload'] == 'ipass':
                         post_facebook_message(sender_id,'airline_itinerary')
 
+                    elif message_text.lower() in "hey,hi,supp,hello".split(','):
+                        post_facebook_message(sender_id,'main_quick_reply')
 
                     else:
                         sender_id = message['sender']['id']
@@ -93,6 +98,7 @@ class MyChatBotView(generic.View):
                     pass
 
         return HttpResponse()  
+
 
 def index(request):
     return HttpResponse('Hello world')
@@ -175,7 +181,6 @@ def boarding_pass_template(fbid):
     return json.dumps(response_object)
 
 
-
 def airline_checkin(fbid):
     response_object = {
                           "recipient": {
@@ -218,8 +223,6 @@ def airline_checkin(fbid):
                         }
 
     return json.dumps(response_object)
-
-
 
 
 def airline_itinerary(fbid):
@@ -358,6 +361,42 @@ def airline_itinerary(fbid):
                         }
 
     return json.dumps(response_object)
+
+
+def main_quick_reply(fbid):
+
+    response_object =   {
+                          "recipient":{
+                            "id":fbid
+                          },
+                          "message":{
+                            "text":"Please select one of the following",
+                            "quick_replies":[
+                              {
+                                "content_type":"text",
+                                "title":"Recommende a seat for me",
+                                "payload":"filter"
+                              },
+                              {
+                                "content_type":"text",
+                                "title":"My Boarding Pass",
+                                "payload":"bpass"
+                              },
+                              {
+                                "content_type":"text",
+                                "title":"My Checkin Pass",
+                                "payload":"cpass"
+                              },
+                              {
+                                "content_type":"text",
+                                "title":"My Airline Itinerary",
+                                "payload":"ipass"
+                              }
+                            ]
+                          }
+                        }
+    return json.dumps(response_object)
+
 
 
 
