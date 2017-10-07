@@ -39,7 +39,10 @@ def post_facebook_message(fbid,message_text):
         response_msg = airline_itinerary(fbid) 
 
     elif message_text == 'main_quick_reply':
-        response_msg = main_quick_reply(fbid)    
+        response_msg = main_quick_reply(fbid) 
+
+    elif message_text == 'seat':
+        response_msg = seat(fbid)    
 
     else:
         response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":message_text}})
@@ -76,8 +79,20 @@ class MyChatBotView(generic.View):
                     firstName = '%s'%(DataInstance['first_name'])
 
 
-                    if message_text.lower() in "hey,hi,supp,hello".split(','):
+                    if message_text == 'My Boarding Pass':
+                        post_facebook_message(sender_id,'boarding_pass_template')
+
+                    elif message_text == 'My Checkin Pass':
+                        post_facebook_message(sender_id,'airline_checkin')
+
+                    elif message_text == 'My Airline Itinerary':
+                        post_facebook_message(sender_id,'airline_itinerary')
+
+                    elif message_text.lower() in "hey,hi,supp,hello".split(','):
                         post_facebook_message(sender_id,'main_quick_reply')
+
+                    elif message_text == 'Recommend a seat for me':
+                        post_facebook_message(sender_id,'seat')
 
                     else:
                         sender_id = message['sender']['id']
@@ -365,7 +380,7 @@ def main_quick_reply(fbid):
                             "quick_replies":[
                               {
                                 "content_type":"text",
-                                "title":"Recommende a seat for me",
+                                "title":"Recommend a seat for me",
                                 "payload":"filter"
                               },
                               {
