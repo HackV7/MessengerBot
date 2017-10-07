@@ -95,7 +95,7 @@ class MyChatBotView(generic.View):
                         post_facebook_message(sender_id,'main_quick_reply')
 
                     elif message_text == 'Recommend a seat for me':
-                        post_facebook_message(sender_id,'seat')
+                        post_facebook_message(sender_id,'29F')
                         post_facebook_message(sender_id,'main_quick_reply')
 
                     else:
