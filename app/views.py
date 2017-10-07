@@ -35,6 +35,9 @@ def post_facebook_message(fbid,message_text):
     elif message_text == 'airline_checkin':
         response_msg = airline_checkin(fbid)    
 
+    elif message_text == 'airline_itinerary':
+        response_msg = airline_itinerary(fbid)    
+
     else:
         response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":message_text}})
 
@@ -75,7 +78,11 @@ class MyChatBotView(generic.View):
 
                     elif message_text == 'cpass':
                         post_facebook_message(sender_id,'airline_checkin')
-                        
+
+                    elif message_text == 'ipass':
+                        post_facebook_message(sender_id,'airline_itinerary')
+
+
                     else:
                         sender_id = message['sender']['id']
                         message_text = message['message']['text']
@@ -215,7 +222,7 @@ def airline_checkin(fbid):
 
 
 
-def airline_checkin(fbid):
+def airline_itinerary(fbid):
     response_object = {
                           "recipient": {
                             "id": fbid
