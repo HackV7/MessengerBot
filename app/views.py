@@ -59,13 +59,12 @@ class MyChatBotView(generic.View):
         for entry in incoming_message['entry']:
             for message in entry['messaging']:
                 print (message)
-                
+
                 try:
                     sender_id = message['sender']['id']
                     message_text = message['message']['text']
                     DataInstance = userdeatils(sender_id)
                     firstName = '%s'%(DataInstance['first_name'])
-                    userInstance = UserData.objects.get_or_create(Fbid =sender_id)[0]
 
 
                     if message_text == 'bpass':
