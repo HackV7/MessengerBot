@@ -21,7 +21,7 @@ def post_facebook_message(fbid,message_text):
 	post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s'%PAGE_ACCESS_TOKEN
 	response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":message_text}})
 	status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
-	print status.json()
+	print (status.json())
 
 
 class MyChatBotView(generic.View):
@@ -41,7 +41,7 @@ class MyChatBotView(generic.View):
 
 		for entry in incoming_message['entry']:
 			for message in entry['messaging']:
-				print message
+				print (message)
 				try:
 					sender_id = message['sender']['id']
 					message_text = message['message']['text']
