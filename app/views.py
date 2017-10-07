@@ -103,10 +103,10 @@ def boarding_pass_template(fbid):
                                     "passenger_name": "SMITH\/NICOLAS",
                                     "pnr_number": "CG4X7U",
                                     "seat": "74J",            
-                                    "logo_image_url": "https:\/\/www.example.com\/en\/logo.png",
-                                    "header_image_url": "https:\/\/www.example.com\/en\/fb\/header.png",
+                                    "logo_image_url": "https://upload.wikimedia.org/wikipedia/en/thumb/b/bf/Vistara_logo.svg/250px-Vistara_logo.svg.png",
+                                    "header_image_url": "https://upload.wikimedia.org/wikipedia/en/thumb/b/bf/Vistara_logo.svg/250px-Vistara_logo.svg.png",
                                     "qr_code": "M1SMITH\/NICOLAS  CG4X7U nawouehgawgnapwi3jfa0wfh",
-                                    "above_bar_code_image_url": "https:\/\/www.example.com\/en\/PLAT.png",
+                                    "above_bar_code_image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/UPC-A-036000291452.png/440px-UPC-A-036000291452.png",
                                     "auxiliary_fields": [
                                       {
                                         "label": "Terminal",
