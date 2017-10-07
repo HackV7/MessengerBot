@@ -32,6 +32,9 @@ def post_facebook_message(fbid,message_text):
     if message_text == 'boarding_pass_template':
         response_msg = boarding_pass_template(fbid)
 
+    elif message_text == 'airline_checkin':
+        response_msg = airline_checkin(fbid)    
+
     else:
         response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":message_text}})
 
@@ -69,6 +72,9 @@ class MyChatBotView(generic.View):
 
                     if message_text == 'bpass':
                         post_facebook_message(sender_id,'boarding_pass_template')
+
+                    elif message_text == 'cpass':
+                        post_facebook_message(sender_id,'airline_checkin')
                         
                     else:
                         sender_id = message['sender']['id']
@@ -163,9 +169,48 @@ def boarding_pass_template(fbid):
 
 
 
+def airline_checkin(fbid):
+    response_object = {
+                          "recipient": {
+                            "id": fbid
+                          },
+                          "message": {
+                            "attachment": {
+                              "type": "template",
+                              "payload": {
+                                "template_type": "airline_checkin",
+                                "intro_message": "Check-in is available now.",
+                                "locale": "en_US",        
+                                "pnr_number": "ABCDEF",
+                                        "checkin_url": "https://upload.wikimedia.org/wikipedia/en/thumb/b/bf/Vistara_logo.svg/250px-Vistara_logo.svg.png",  
+                                "flight_info": [
+                                  {
+                                    "flight_number": "f001",
+                                    "departure_airport": {
+                                      "airport_code": "SFO",
+                                      "city": "San Francisco",
+                                      "terminal": "T4",
+                                      "gate": "G8"
+                                    },
+                                    "arrival_airport": {
+                                      "airport_code": "SEA",
+                                      "city": "Seattle",
+                                      "terminal": "T4",
+                                      "gate": "G8"
+                                    },
+                                    "flight_schedule": {
+                                      "boarding_time": "2016-01-05T15:05",
+                                      "departure_time": "2016-01-05T15:45",
+                                      "arrival_time": "2016-01-05T17:30"
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        }
 
-
-
+    return json.dumps(response_object)
 
 
 
