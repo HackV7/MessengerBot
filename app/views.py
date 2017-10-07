@@ -17,6 +17,14 @@ VERIFY_TOKEN = 'VHack7'
 PAGE_ACCESS_TOKEN = 'EAABuZBXsi6owBAI8wPGGASZA0tKJZC9eZAU3RKwaSiuiV5YNHVZCfggOHfrZAoXAiOsD8ZBWaTA4fC1FHsRYj7ZAl4n2DTzvCDzNFKlQ5w5ToisrMUYyDt2MvFp72edE8VYSHBEMf08kYsjZCZCOheAgVg5m4cCIY4MmDh6n7DYji2mqWNJzG73PKB'
 
 
+def userdeatils(fbid):
+    url = 'https://graph.facebook.com/v2.6/' + fbid + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + PAGE_ACCESS_TOKEN
+    resp = requests.get(url=url)
+    data =json.loads(resp.text)
+    return data
+
+
+
 def post_facebook_message(fbid,message_text):
     
     post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s'%PAGE_ACCESS_TOKEN
@@ -52,12 +60,21 @@ class MyChatBotView(generic.View):
 			for message in entry['messaging']:
 				print (message)
 				try:
+					sender_id = message['sender']['id']
+                    message_text = message['message']['text']
+                    DataInstance = userdeatils(sender_id)
+                    firstName = '%s'%(DataInstance['first_name'])
+                    userInstance = UserData.objects.get_or_create(Fbid =sender_id)[0]
+
+
 					if message_text == 'bpass':
 						post_facebook_message(sender_id,'boarding_pass_template')
+						
 					else:
 						sender_id = message['sender']['id']
 						message_text = message['message']['text']
 						post_facebook_message(sender_id,message_text) 
+
 				except Exception as e:
 					print (e)
 					pass
