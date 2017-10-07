@@ -42,122 +42,123 @@ def post_facebook_message(fbid,message_text):
 
 
 class MyChatBotView(generic.View):
-	def get(self, request, *args, **kwargs):
-		if self.request.GET['hub.verify_token'] == VERIFY_TOKEN:
-			return HttpResponse(self.request.GET['hub.challenge'])
-		else:
-			return HttpResponse('Oops invalid token')
+    def get(self, request, *args, **kwargs):
+        if self.request.GET['hub.verify_token'] == VERIFY_TOKEN:
+            return HttpResponse(self.request.GET['hub.challenge'])
+        else:
+            return HttpResponse('Oops invalid token')
 
-	@method_decorator(csrf_exempt)
-	def dispatch(self, request, *args, **kwargs):
-		return generic.View.dispatch(self, request, *args, **kwargs)
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return generic.View.dispatch(self, request, *args, **kwargs)
 
-	def post(self, request, *args, **kwargs):
-		incoming_message= json.loads(self.request.body.decode('utf-8'))
-		print (incoming_message)
+    def post(self, request, *args, **kwargs):
+        incoming_message= json.loads(self.request.body.decode('utf-8'))
+        print (incoming_message)
 
-		for entry in incoming_message['entry']:
-			for message in entry['messaging']:
-				print (message)
-				try:
-					sender_id = message['sender']['id']
+        for entry in incoming_message['entry']:
+            for message in entry['messaging']:
+                print (message)
+                
+                try:
+                    sender_id = message['sender']['id']
                     message_text = message['message']['text']
                     DataInstance = userdeatils(sender_id)
                     firstName = '%s'%(DataInstance['first_name'])
                     userInstance = UserData.objects.get_or_create(Fbid =sender_id)[0]
 
 
-					if message_text == 'bpass':
-						post_facebook_message(sender_id,'boarding_pass_template')
-						
-					else:
-						sender_id = message['sender']['id']
-						message_text = message['message']['text']
-						post_facebook_message(sender_id,message_text) 
+                    if message_text == 'bpass':
+                        post_facebook_message(sender_id,'boarding_pass_template')
+                        
+                    else:
+                        sender_id = message['sender']['id']
+                        message_text = message['message']['text']
+                        post_facebook_message(sender_id,message_text) 
 
-				except Exception as e:
-					print (e)
-					pass
+                except Exception as e:
+                    print (e)
+                    pass
 
-		return HttpResponse()  
+        return HttpResponse()  
 
 def index(request):
-	return HttpResponse('Hello world')
+    return HttpResponse('Hello world')
 
 
 def boarding_pass_template(fbid):
     
     response_object = {
-						  "recipient": {
-						    "id": fbid
-						  },
-						  "message": {
-						    "attachment": {
-						      "type": "template",
-						      "payload": {
-						        "template_type": "airline_boardingpass",
-						        "intro_message": "You are checked in.",
-						        "locale": "en_US",
-						        "boarding_pass": [
-						          {
-						            "passenger_name": "SMITH\/NICOLAS",
-						            "pnr_number": "CG4X7U",
-						            "seat": "74J",            
-						            "logo_image_url": "https:\/\/www.example.com\/en\/logo.png",
-						            "header_image_url": "https:\/\/www.example.com\/en\/fb\/header.png",
-						            "qr_code": "M1SMITH\/NICOLAS  CG4X7U nawouehgawgnapwi3jfa0wfh",
-						            "above_bar_code_image_url": "https:\/\/www.example.com\/en\/PLAT.png",
-						            "auxiliary_fields": [
-						              {
-						                "label": "Terminal",
-						                "value": "T1"
-						              },
-						              {
-						                "label": "Departure",
-						                "value": "30OCT 19:05"
-						              }
-						            ],
-						            "secondary_fields": [
-						              {
-						                "label": "Boarding",
-						                "value": "18:30"
-						              },
-						              {
-						                "label": "Gate",
-						                "value": "D57"
-						              },
-						              {
-						                "label": "Seat",
-						                "value": "74J"
-						              },
-						              {
-						                "label": "Sec.Nr.",
-						                "value": "003"
-						              }
-						            ],
-						            "flight_info": {
-						              "flight_number": "KL0642",
-						              "departure_airport": {
-						                "airport_code": "JFK",
-						                "city": "New York",
-						                "terminal": "T1",
-						                "gate": "D57"
-						              },
-						              "arrival_airport": {
-						                "airport_code": "AMS",
-						                "city": "Amsterdam"
-						              },
-						              "flight_schedule": {
-						                "departure_time": "2016-01-02T19:05",
-						                "arrival_time": "2016-01-05T17:30"
-						              }
-						            }
-						          }
-						        ]
-						      }
-						    }
-						  }
-						}
+                          "recipient": {
+                            "id": fbid
+                          },
+                          "message": {
+                            "attachment": {
+                              "type": "template",
+                              "payload": {
+                                "template_type": "airline_boardingpass",
+                                "intro_message": "You are checked in.",
+                                "locale": "en_US",
+                                "boarding_pass": [
+                                  {
+                                    "passenger_name": "SMITH\/NICOLAS",
+                                    "pnr_number": "CG4X7U",
+                                    "seat": "74J",            
+                                    "logo_image_url": "https:\/\/www.example.com\/en\/logo.png",
+                                    "header_image_url": "https:\/\/www.example.com\/en\/fb\/header.png",
+                                    "qr_code": "M1SMITH\/NICOLAS  CG4X7U nawouehgawgnapwi3jfa0wfh",
+                                    "above_bar_code_image_url": "https:\/\/www.example.com\/en\/PLAT.png",
+                                    "auxiliary_fields": [
+                                      {
+                                        "label": "Terminal",
+                                        "value": "T1"
+                                      },
+                                      {
+                                        "label": "Departure",
+                                        "value": "30OCT 19:05"
+                                      }
+                                    ],
+                                    "secondary_fields": [
+                                      {
+                                        "label": "Boarding",
+                                        "value": "18:30"
+                                      },
+                                      {
+                                        "label": "Gate",
+                                        "value": "D57"
+                                      },
+                                      {
+                                        "label": "Seat",
+                                        "value": "74J"
+                                      },
+                                      {
+                                        "label": "Sec.Nr.",
+                                        "value": "003"
+                                      }
+                                    ],
+                                    "flight_info": {
+                                      "flight_number": "KL0642",
+                                      "departure_airport": {
+                                        "airport_code": "JFK",
+                                        "city": "New York",
+                                        "terminal": "T1",
+                                        "gate": "D57"
+                                      },
+                                      "arrival_airport": {
+                                        "airport_code": "AMS",
+                                        "city": "Amsterdam"
+                                      },
+                                      "flight_schedule": {
+                                        "departure_time": "2016-01-02T19:05",
+                                        "arrival_time": "2016-01-05T17:30"
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        }
 
     return json.dumps(response_object)
 
