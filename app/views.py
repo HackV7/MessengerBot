@@ -76,16 +76,7 @@ class MyChatBotView(generic.View):
                     firstName = '%s'%(DataInstance['first_name'])
 
 
-                    if message['message']['quick_reply']['payload'] == 'bpass':
-                        post_facebook_message(sender_id,'boarding_pass_template')
-
-                    elif message['message']['quick_reply']['payload'] == 'cpass':
-                        post_facebook_message(sender_id,'airline_checkin')
-
-                    elif message['message']['quick_reply']['payload'] == 'ipass':
-                        post_facebook_message(sender_id,'airline_itinerary')
-
-                    elif message_text.lower() in "hey,hi,supp,hello".split(','):
+                    if message_text.lower() in "hey,hi,supp,hello".split(','):
                         post_facebook_message(sender_id,'main_quick_reply')
 
                     else:
